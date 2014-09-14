@@ -39,12 +39,6 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 	var quizModel = Model({
 		init: function(){
 			var _this = this;
-			if(!this.get("method")) {
-				this.set("method", "simplePoints");
-			}
-			if(!this.get("onlyOnce")) {
-				this.set("onlyOnce", false);
-			}
 			this.on("answered", function(){
 				if(_this.checkAnswered()) {
 					_this.calculateResult();
@@ -67,7 +61,7 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 
 				var rl = answer.get("resultList");
 				if(rl){
-					if(_this.get("method") == "simplePoints"){
+					if(settings.method == "simplePoints"){
 						$.each(rl, function(i,v){
 							var level = v;
 							var score = level.score || (rl.length - i);
@@ -79,7 +73,7 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 						//TODO
 					}
 				} else {
-					if(_this.get("method") == "simplePoints"){
+					if(settings.method == "simplePoints"){
 						answers[answer.get("result")] = answers[answer.get("result")] || 0;
 						answers[answer.get("result")] += answer.get("score");
 					} else {
@@ -147,7 +141,7 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 		},
 		events: {
 			"click >": function(e) {
-				if(!(quiz.get("done") && quiz.get("onlyOnce"))) {
+				if(!(quiz.get("done") && settings.onlyOnce)) {
 					var answers = e.data.model.get("parent").get("answers");
 					$.each(answers, function(i,v){
 						v.set("selected", false)
@@ -207,6 +201,8 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 		result_template: "#result_template",
 		shuffle: true,
 		debounce: 10,
+		onlyOnce: false,
+		method: "simplePoints",
 	}
 	var settings = {};
 

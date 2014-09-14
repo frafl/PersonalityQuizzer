@@ -68,6 +68,8 @@ var quiz = new PersonalityQuizzer({
 		result_template: "#result_template",
 		shuffle: true,
 		debounce: 10,
+		onlyOnce: false,
+		method: "simplePoints",
 	},
 	questions: [ /* questions objects */ ],
 	results: [ /* result objects */ ],
@@ -82,6 +84,8 @@ answer_template | text | answer_template | the id of the template
 result_template | text | result_template | the id of the template
 shuffle | boolean | true | shuffles the question order.
 debounce | number | 10 | stop the template from rerendering to often.
+onlyOnce | boolean | false | after finishing the quiz no change of answers is possible
+method | text | simplePoints | only one method implemented which only adds all points for each result, thus this allows for Borda count, Range Voting and similar (if each question is seen as a voter); Condorcet methods will follow
 
 ## Anatomy of a Question Object
 
