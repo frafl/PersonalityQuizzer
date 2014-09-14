@@ -42,6 +42,9 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 			if(!this.get("method")) {
 				this.set("method", "simplePoints");
 			}
+			if(!this.get("onlyOnce")) {
+				this.set("onlyOnce", false);
+			}
 			this.on("answered", function(){
 				if(_this.checkAnswered()) {
 					_this.calculateResult();
@@ -97,14 +100,18 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 			if(winnerId) {
 				this.showResult(winnerId);
 			}
-
+			
 			this.set("done", true)
 
 		},
 		showResult: function(resultId) {
-			var result = $(this.get("results")).filter(function(){
-				return this.get("id") == resultId;
-			})[0];
+			var result = false;
+			$.each(this.get("results"), function(i,v){
+				if(v.get("id") == resultId)
+					result = v
+				else
+					v.set("selected", false);
+			})
 			
 			result.set("selected", true);
 			var el = result.get("el");
@@ -112,9 +119,11 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 			var windowHeight = $(window).height();
 			var scrollTo = elOffset - (windowHeight / 3);
 			
-			$(document.body).animate({
-				scrollTop: scrollTo
-			}, 2000);
+			if(!this.get("done")){
+				$(document.body).animate({
+					scrollTop: scrollTo
+				}, 2000);
+			}
 		}
 	});
 	var questionModel = Model({
@@ -138,7 +147,7 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 		},
 		events: {
 			"click >": function(e) {
-				if(!quiz.get("done")) {
+				if(!(quiz.get("done") && quiz.get("onlyOnce"))) {
 					var answers = e.data.model.get("parent").get("answers");
 					$.each(answers, function(i,v){
 						v.set("selected", false)
