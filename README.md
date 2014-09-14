@@ -98,14 +98,28 @@ Other attributes will be passed in to the template.
 
 ## Anatomy of an Answer Object
 
-Each answer object must have a result id that corisponds with the <a href="#anatomy-of-a-result-object">result objects</a>. The score is used to weight different answers in favor of diferent results.
+Each answer object must have one of two things:
+Either a result id that corresponds with the <a href="#anatomy-of-a-result-object">result objects</a>. The score is used to weight different answers in favor of different results.
+The second option is to provide a result list, i.e. an array of <a href="#anatomy-of-a-result-level-object">levels of results</a> in decreasing order of appropriateness to the answer.
 
 Other attributes will be passed in to the template.
 
 ```javascript
 {
-	result: 1, /* required */
-	score: 1 /* optional */
+	result: 1, /* this or a resultList is required, as list has preference over a single result */
+	resultList: [ /* result levels objects */ ]
+	score: 1 /* optional, only used if no resultList is given */
+}
+```
+
+## Anatomy of a Result Level Object
+
+A result level object must contain an array of integers called "results". Each element of this set shall be an id corresponding to a <a href="#anatomy-of-a-result-object">result object</a>. Each result in receives score points for this question. Note that you may also assign malus points (i.e. negative points) to a level.
+
+```javascript
+{
+	score: 1, /* optional */
+	results: [/* result ids */]
 }
 ```
 

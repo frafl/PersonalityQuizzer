@@ -39,6 +39,9 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 	var quizModel = Model({
 		init: function(){
 			var _this = this;
+			if(!this.get("method")) {
+				this.set("method", "simplePoints");
+			}
 			this.on("answered", function(){
 				if(_this.checkAnswered()) {
 					_this.calculateResult();
@@ -59,8 +62,27 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 			$.each(this.get("questions"), function(i,v){
 				var answer = v.getAnswer();
 
-				answers[answer.get("result")] = answers[answer.get("result")] || 0;
-				answers[answer.get("result")] += answer.get("score");
+				var rl = answer.get("resultList");
+				if(rl){
+					if(_this.get("method") == "simplePoints"){ 
+						$.each(rl, function(i,v){
+							level = v;
+							score = level.score || (rl.length - i);
+							$.each(level.results, function(i,v){
+								answers[v] = (answers[v] || 0) + score;
+							})
+						})
+					} else {
+						//TODO
+					}
+				} else {
+					if(_this.get("method") == "simplePoints"){
+						answers[answer.get("result")] = answers[answer.get("result")] || 0;
+						answers[answer.get("result")] += answer.get("score");
+					} else {
+						//TODO
+					}
+				}
 			});
 
 			var winnerId;
