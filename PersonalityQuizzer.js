@@ -64,10 +64,10 @@ var PersonalityQuizzer = (function($, DOMBars, window, document){
 
 				var rl = answer.get("resultList");
 				if(rl){
-					if(_this.get("method") == "simplePoints"){ 
+					if(_this.get("method") == "simplePoints"){
 						$.each(rl, function(i,v){
-							level = v;
-							score = level.score || (rl.length - i);
+							var level = v;
+							var score = level.score || (rl.length - i);
 							$.each(level.results, function(i,v){
 								answers[v] = (answers[v] || 0) + score;
 							})
